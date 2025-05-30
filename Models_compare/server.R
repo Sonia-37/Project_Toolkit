@@ -1,0 +1,122 @@
+library(shiny)
+
+library(shiny)
+library(deSolve)
+source("models.R")
+
+server <- function(input, output) {
+  
+  simulateModels <- reactive({
+    # Shared baseline values
+    Gb <- 88
+    Ib <- input$baseInsulin
+    
+    # Dynamic model 
+    dyn_params <- c(
+      b0 = input$glucoseDose,
+      b1 = 0.0002,
+      b2 = 0.0422,
+      b3 = 1.64,
+      b4 = 0.000109,
+      b5 = 320,
+      b6 = 0.033,
+      b7 = 0.68,
+      alpha = 0.01,
+      Gb = Gb,
+      Ib = Ib
+    )
+    
+    G0_dyn <- Gb + dyn_params["b0"]
+    I0_dyn <- Ib + dyn_params["b3"] * dyn_params["b0"]
+    init_dyn <- c(G = G0_dyn, I = I0_dyn)
+    time_dyn <- seq(0, 15000, by = 1)
+    
+    out_dyn <- dede(
+      y = init_dyn,
+      times = time_dyn,
+      func = dynamic_model,
+      parms = dyn_params,
+      method = "lsoda"
+    )
+    colnames(out_dyn) <- c("time", "G", "I")
+    out_dyn <- as.data.frame(out_dyn)
+    
+    # Minimal model 
+    min_params <- c(
+      P1 = 0.03082,
+      P2 = 0.02093,
+      P3 = 1.062e-5,
+      n = 0.1,
+      gamma = 1e-4,
+      h = 100,
+      Gb = Gb,
+      Ib = Ib
+    )
+    
+    init_min <- c(
+      G = input$glucoseDose + Gb,  # initial G same as dose
+      X = 0,
+      I = Ib
+    )
+    time_min <- seq(0, 180, by = 0.5)
+    
+    out_min <- ode(
+      y = init_min,
+      times = time_min,
+      func = minimal_model,
+      parms = min_params
+    )
+    colnames(out_min) <- c("time", "G", "X", "I")
+    out_min <- as.data.frame(out_min)
+    
+    list(dynamic = out_dyn, minimal = out_min)
+  })
+  
+  output$dynGlucosePlot <- renderPlot({
+    if (input$plotMode == "time") {
+      out <- simulateModels()$dynamic
+      plot(out$time, out$G, type = "l", col = "blue",
+           xlab = "Time (min)", ylab = "Glucose (mg/dL)", main = "Dynamic Model - Glucose")
+    }
+  })
+  
+  output$minGlucosePlot <- renderPlot({
+    if (input$plotMode == "time") {
+      out <- simulateModels()$minimal
+      plot(out$time, out$G, type = "l", col = "blue",
+           xlab = "Time (min)", ylab = "Glucose (mg/dL)", main = "Minimal Model - Glucose")
+    }
+  })
+  
+  output$dynInsulinPlot <- renderPlot({
+    if (input$plotMode == "time") {
+      out <- simulateModels()$dynamic
+      plot(out$time, out$I, type = "l", col = "red", ylim = c(0, 250),
+           xlab = "Time (min)", ylab = "Insulin (µU/mL)", main = "Dynamic Model - Insulin")
+    }
+  })
+  
+  output$minInsulinPlot <- renderPlot({
+    if (input$plotMode == "time") {
+      out <- simulateModels()$minimal
+      plot(out$time, out$I, type = "l", col = "red",
+           xlab = "Time (min)", ylab = "Insulin (µU/mL)", main = "Minimal Model - Insulin")
+    }
+  })
+  
+  output$dynGlucoseInsulinPlot <- renderPlot({
+    if (input$plotMode == "gi") {
+      out <- simulateModels()$dynamic
+      plot(out$I, out$G, type = "l", col = "purple", ylim = c(0, 300),
+           xlab = "Insulin (pM)", ylab = "Glucose (mg/dL)", main = "Dynamic Model - Glucose ~ Insulin")
+    }
+  })
+  
+  output$minGlucoseInsulinPlot <- renderPlot({
+    if (input$plotMode == "gi") {
+      out <- simulateModels()$minimal
+      plot(out$I, out$G, type = "l", col = "purple", ylim = c(0, 300),
+           xlab = "Insulin (pM)", ylab = "Glucose (mg/dL)", main = "Minimal Model - Glucose ~ Insulin")
+    }
+  })
+}
