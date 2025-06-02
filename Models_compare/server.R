@@ -1,6 +1,4 @@
 library(shiny)
-
-library(shiny)
 library(deSolve)
 library(ggplot2)
 source("models.R")
@@ -15,14 +13,13 @@ server <- function(input, output) {
     # Dynamic model 
     dyn_params <- c(
       b0 = input$glucoseDose,
-      b1 = 0.0002,
-      b2 = 0.0422,
+      b1 = 0.0226,
+      b2 = 0.1262,
       b3 = 1.64,
-      b4 = 0.000109,
-      b5 = 320,
-      b6 = 0.033,
-      b7 = 0.68,
-      alpha = 0.01,
+      b4 = 0.0000564,
+      b5 = 15,        
+      b6 = 0.074,
+      b7 = 1.93,
       Gb = Gb,
       Ib = Ib
     )
@@ -30,7 +27,7 @@ server <- function(input, output) {
     G0_dyn <- Gb + dyn_params["b0"]
     I0_dyn <- Ib + dyn_params["b3"] * dyn_params["b0"]
     init_dyn <- c(G = G0_dyn, I = I0_dyn)
-    time_dyn <- seq(0, 15000, by = 1)
+    time_dyn <- seq(0, 180, by = 1)
     
     out_dyn <- dede(
       y = init_dyn,
@@ -72,13 +69,12 @@ server <- function(input, output) {
     
     list(dynamic = out_dyn, minimal = out_min)
   })
-  
-  output$dynGlucosePlot <- renderPlot({
+    output$dynGlucosePlot <- renderPlot({
     if (input$plotMode == "time") {
       out <- simulateModels()$dynamic
       ggplot(out, aes(x = time, y = G)) +
         geom_line(color = "blue", linewidth = 1) +
-        labs(title = "Minimal Model - Glucose",
+        labs(title = "Dynamic Model - Glucose",
              x = "Time (min)", 
              y = "Glucose (mg/dL)") +
         theme_minimal()+
@@ -104,9 +100,10 @@ server <- function(input, output) {
       out <- simulateModels()$dynamic
       ggplot(out, aes(x = time, y = I)) +
         geom_line(color = "red", linewidth = 1) +
-        labs(title = "Minimal Model - Insulin",
+        labs(title = "Dynamic Model - Insulin",
              x = "Time (min)", 
-             y = "Insulin (µU/mL)") +
+             y = "Insulin (pM)") +
+        ylim(0, 250) +
         theme_minimal()+
         theme(plot.title = element_text(hjust = 0.5, face = "bold"))
     }
@@ -119,7 +116,7 @@ server <- function(input, output) {
         geom_line(color = "red", linewidth = 1) +
         labs(title = "Minimal Model - Insulin",
              x = "Time (min)", 
-             y = "Insulin (µU/mL)") +
+             y = "Insulin (pM)") +
         theme_minimal()+
         theme(plot.title = element_text(hjust = 0.5, face = "bold"))
       
@@ -134,6 +131,7 @@ server <- function(input, output) {
         labs(title = "Dynamic Model: Glucose vs Insulin",
              x = "Insulin (pM)", 
              y = "Glucose (mg/dL)") +
+        ylim(0, 500) +
         theme_minimal() +
         theme(plot.title = element_text(hjust = 0.5, face = "bold"))
     }
@@ -147,6 +145,7 @@ server <- function(input, output) {
         labs(title = "Minimal Model: Glucose vs Insulin",
              x = "Insulin (pM)", 
              y = "Glucose (mg/dL)") +
+        ylim(0, 500) +
         theme_minimal() +
         theme(plot.title = element_text(hjust = 0.5, face = "bold"))
     }
