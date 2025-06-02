@@ -99,6 +99,7 @@ server <- function(input, output) {
     
     list(dynamic = out_dyn, minimal = out_min, dynamic_long = out_dyn_long)
   })
+
   
   # Concentration ~ time plots for both models
   output$dynGlucosePlot <- renderPlot({
@@ -210,7 +211,7 @@ server <- function(input, output) {
         theme(plot.title = element_text(hjust = 0.5, face = "bold"))
     }
   })
-  
+
   # Time delay oscillations in Dynamical model
   output$dynLongGlucosePlot <- renderPlot({
     if (input$plotMode == "delay") {
@@ -252,3 +253,4 @@ server <- function(input, output) {
     }
   })
 }
+

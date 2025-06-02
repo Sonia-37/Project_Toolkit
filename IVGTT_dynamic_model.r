@@ -47,8 +47,7 @@ params <- c(
   b7 = 1.93,
   alpha = 0.01,
   Gb = 88,
-  Ib = 68.6
-  
+  Ib = 68.6  
 )
 
 # Initial state
