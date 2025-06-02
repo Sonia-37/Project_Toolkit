@@ -38,13 +38,13 @@ model <- function(t, y, parameters) {
 # Parameters
 params <- c(
   b0 = 209,
-  b1 = 0.0002,
-  b2 = 0.0422,
+  b1 = 0.0226,
+  b2 = 0.1262,
   b3 = 1.64,
-  b4 = 0.000109,
-  b5 = 320,        
-  b6 = 0.033,
-  b7 = 0.68,
+  b4 = 0.0000564,
+  b5 = 15,        
+  b6 = 0.064,
+  b7 = 1.93,
   alpha = 0.01,
   Gb = 88,
   Ib = 68.6
@@ -56,7 +56,7 @@ G0 <- params["Gb"] + params["b0"]
 I0 <- params["Ib"] + params["b3"] * params["b0"]
 initial_state <- c(G = G0, I = I0)
 
-times <- seq(0, 15000, by = 1)
+times <- seq(0, 180, by = 0.1)
 
 # Simulation
 out <- dede(
@@ -72,7 +72,7 @@ colnames(out) <- c("time", "G", "I")
 
 # Plot
 matplot(out[, "time"], out[, c("G", "I")], type = "l", lty = 1, col = c("blue", "red"), 
-        ylim=c(0, 250),
+        ylim=c(0, 400),
         xlab = "time (min)", ylab = "Concentration", main = "IVGTT glucose–insulin interaction dynamic model")
 legend("topright", legend = c("Glucose", "Insulin"), col = c("blue", "red"), lty = 1)
 
