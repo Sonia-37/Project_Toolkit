@@ -76,48 +76,79 @@ server <- function(input, output) {
   output$dynGlucosePlot <- renderPlot({
     if (input$plotMode == "time") {
       out <- simulateModels()$dynamic
-      plot(out$time, out$G, type = "l", col = "blue",
-           xlab = "Time (min)", ylab = "Glucose (mg/dL)", main = "Dynamic Model - Glucose")
+      ggplot(out, aes(x = time, y = G)) +
+        geom_line(color = "blue", linewidth = 1) +
+        labs(title = "Minimal Model - Glucose",
+             x = "Time (min)", 
+             y = "Glucose (mg/dL)") +
+        theme_minimal()+
+        theme(plot.title = element_text(hjust = 0.5, face = "bold"))
     }
   })
   
   output$minGlucosePlot <- renderPlot({
     if (input$plotMode == "time") {
       out <- simulateModels()$minimal
-      plot(out$time, out$G, type = "l", col = "blue",
-           xlab = "Time (min)", ylab = "Glucose (mg/dL)", main = "Minimal Model - Glucose")
+      ggplot(out, aes(x = time, y = G)) +
+        geom_line(color = "blue", linewidth = 1) +
+        labs(title = "Minimal Model - Glucose",
+             x = "Time (min)", 
+             y = "Glucose (mg/dL)") +
+        theme_minimal()+
+        theme(plot.title = element_text(hjust = 0.5, face = "bold"))
     }
   })
   
   output$dynInsulinPlot <- renderPlot({
     if (input$plotMode == "time") {
       out <- simulateModels()$dynamic
-      plot(out$time, out$I, type = "l", col = "red", ylim = c(0, 250),
-           xlab = "Time (min)", ylab = "Insulin (µU/mL)", main = "Dynamic Model - Insulin")
+      ggplot(out, aes(x = time, y = I)) +
+        geom_line(color = "red", linewidth = 1) +
+        labs(title = "Minimal Model - Insulin",
+             x = "Time (min)", 
+             y = "Insulin (µU/mL)") +
+        theme_minimal()+
+        theme(plot.title = element_text(hjust = 0.5, face = "bold"))
     }
   })
   
   output$minInsulinPlot <- renderPlot({
     if (input$plotMode == "time") {
       out <- simulateModels()$minimal
-      plot(out$time, out$I, type = "l", col = "red",
-           xlab = "Time (min)", ylab = "Insulin (µU/mL)", main = "Minimal Model - Insulin")
+      ggplot(out, aes(x = time, y = I)) +
+        geom_line(color = "red", linewidth = 1) +
+        labs(title = "Minimal Model - Insulin",
+             x = "Time (min)", 
+             y = "Insulin (µU/mL)") +
+        theme_minimal()+
+        theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+      
     }
   })
   
   output$dynGlucoseInsulinPlot <- renderPlot({
     if (input$plotMode == "gi") {
       out <- simulateModels()$dynamic
-      plot(out$I, out$G, type = "l", col = "purple", ylim = c(0, 300),
-           xlab = "Insulin (pM)", ylab = "Glucose (mg/dL)", main = "Dynamic Model - Glucose ~ Insulin")
+      ggplot(out, aes(x = I, y = G)) +
+        geom_path(color = "purple", linewidth = 1) +
+        labs(title = "Dynamic Model: Glucose vs Insulin",
+             x = "Insulin (pM)", 
+             y = "Glucose (mg/dL)") +
+        theme_minimal() +
+        theme(plot.title = element_text(hjust = 0.5, face = "bold"))
     }
   })
   
   output$minGlucoseInsulinPlot <- renderPlot({
     if (input$plotMode == "gi") {
       out <- simulateModels()$minimal
-      plot(out$I, out$G, type = "l", col = "purple", ylim = c(0, 300),
-           xlab = "Insulin (pM)", ylab = "Glucose (mg/dL)", main = "Minimal Model - Glucose ~ Insulin")
+      ggplot(out, aes(x = I, y = G)) +
+        geom_path(color = "purple", linewidth = 1) +
+        labs(title = "Minimal Model: Glucose vs Insulin",
+             x = "Insulin (pM)", 
+             y = "Glucose (mg/dL)") +
+        theme_minimal() +
+        theme(plot.title = element_text(hjust = 0.5, face = "bold"))
     }
   })
   
@@ -129,6 +160,7 @@ server <- function(input, output) {
         labs(title = "Minimal Model - Glucose",
              x = "Time (min)", 
              y = "Glucose (mg/dL)") +
+        theme_minimal()+
         theme(plot.title = element_text(hjust = 0.5, face = "bold"))
     }
   })
@@ -140,6 +172,7 @@ server <- function(input, output) {
         labs(title = "Minimal Model - Insulin",
              x = "Time (min)", 
              y = "Insulin (µU/mL)") +
+        theme_minimal()+
         theme(plot.title = element_text(hjust = 0.5, face = "bold"))
     }
   })
