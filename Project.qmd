@@ -47,11 +47,11 @@ minimal_model <- function(t, y, parameters) {
   X = y[2]
   I = y[3]
   
-  # Glukose
+  # Glucose
   dG <- -(P1 + X) * G + P1 * Gb
   # Auxiliary variable X
   dX <- -P2 * X + P3 * (I - Ib)
-  # Insuline
+  # Insulin
   dI <- -n * (I - Ib) + gamma * t * pmax(G - h, 0)
 
   return(list(c(dG, dX, dI)))
@@ -73,7 +73,7 @@ parameters <- c(
   P3 =  1.062*10^(-5),    
   n = 0.1,       
   gamma = 1e-4,  
-  h = 100,       
+  h = 70,       
   Gb = 88,       
   Ib = 68.6      
 )

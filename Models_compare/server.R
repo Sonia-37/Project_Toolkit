@@ -2,6 +2,7 @@ library(shiny)
 
 library(shiny)
 library(deSolve)
+library(ggplot2)
 source("models.R")
 
 server <- function(input, output) {
@@ -48,7 +49,7 @@ server <- function(input, output) {
       P3 = 1.062e-5,
       n = 0.1,
       gamma = 1e-4,
-      h = 100,
+      h = input$h,
       Gb = Gb,
       Ib = Ib
     )
@@ -117,6 +118,29 @@ server <- function(input, output) {
       out <- simulateModels()$minimal
       plot(out$I, out$G, type = "l", col = "purple", ylim = c(0, 300),
            xlab = "Insulin (pM)", ylab = "Glucose (mg/dL)", main = "Minimal Model - Glucose ~ Insulin")
+    }
+  })
+  
+  output$dystminGlucosePlot <- renderPlot({
+    if (input$plotMode == "disturb") {
+      out <- simulateModels()$minimal
+      ggplot(out, aes(x = time, y = G)) +
+        geom_line(color = "orange", linewidth = 1) +
+        labs(title = "Minimal Model - Glucose",
+             x = "Time (min)", 
+             y = "Glucose (mg/dL)") +
+        theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+    }
+  })
+  output$dystminInsulinPlot <- renderPlot({
+    if (input$plotMode == "disturb") {
+      out <- simulateModels()$minimal
+      ggplot(out, aes(x = time, y = I)) +
+        geom_line(color = "orange", linewidth = 1) +
+        labs(title = "Minimal Model - Insulin",
+             x = "Time (min)", 
+             y = "Insulin (µU/mL)") +
+        theme(plot.title = element_text(hjust = 0.5, face = "bold"))
     }
   })
 }
