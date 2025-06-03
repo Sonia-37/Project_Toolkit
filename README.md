@@ -10,6 +10,6 @@ The project consists of three folders:
 - The Final Project folder includes the Shiny application and the report in PDF format, created using LaTeX.
 
 ## Contribution to the Project:
-- Zofia Sikorska: Created the GitHub repository, developed the Minimal Model, implemented Parameter Disturbance in the Minimal Model in Shiny, added plots to the report, wrote Section 3.1 of the report, and reorganized the folder structure.
+- Zofia Sikorska: Created the GitHub repository, developed the Minimal Model, implemented Parameter Disturbance in the Minimal Model in Shiny, added plots to the report, wrote Section 3.1 of the report, and reorganized the folder structure, wrote README.md file.
 - Kinga Kurowska: 
 - Wiktor Rorat: 
