@@ -11,5 +11,5 @@ The project consists of three folders:
 
 ## Contribution to the Project:
 - Zofia Sikorska: Created the GitHub repository, developed the Minimal Model, implemented Parameter Disturbance in the Minimal Model in Shiny, added plots to the report, wrote Section 3.1 of the report, and reorganized the folder structure, wrote README.md file.
-- Kinga Kurowska: 
+- Kinga Kurowska: developed the Dynamical Model, implemented comparition of Dynamical and Minimal Model in Shiny, implemented time delay dependent oscillations in Dynamical Model in Shiny
 - Wiktor Rorat: 
