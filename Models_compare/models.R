@@ -22,7 +22,7 @@ minimal_model <- function(t, y, parameters) {
   dG <- -(P1 + X) * G + P1 * Gb
   # Auxiliary variable X
   dX <- -P2 * X + P3 * (I - Ib)
-  # Insuline
+  # Insulin
   dI <- -n * (I - Ib) + gamma * t * pmax(G - h, 0)
   
   return(list(c(dG, dX, dI)))
@@ -57,12 +57,17 @@ dynamic_model <- function(t, y, parameters) {
   list(c(dG, dI))
 }
 
+glucose_intakes = c(100,500,1000,1200)
+times_taken = c(FALSE,FALSE,FALSE,FALSE)
+
 u <- function(t) {
-  if (t %in% c(10, 14, 18)) {
-    return(4)
-  } else {
-    return(0)
+  for( x in 1:length(glucose_intakes)) {
+    if(t > glucose_intakes[x] & times_taken[x] == FALSE) {
+      times_taken[x] = TRUE
+      return(4)
+    }
   }
+  0
 }
 
 # BetaIG Model function
