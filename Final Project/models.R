@@ -91,6 +91,4 @@ BIG_model <- function(t, y, parameters) {
   dB <- B * (mu_production * 1/(1 + (8.4/G)^1.7) - mu_removal * 1/(1 + (G/4.8)^8.5))
   
   list(c(dG, dI, dB))
-=======
->>>>>>> ecc91150dff9835d7ed6493a19d48d8ed75f6401:Final Project/models.R
 }
