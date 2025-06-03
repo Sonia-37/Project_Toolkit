@@ -56,3 +56,34 @@ dynamic_model <- function(t, y, parameters) {
   
   list(c(dG, dI))
 }
+
+u <- function(t) {
+  if (t %in% c(10, 14, 18)) {
+    return(4)
+  } else {
+    return(0)
+  }
+}
+
+# BetaIG Model function
+BIG_model <- function(t, y, parameters) {
+  u0 <- parameters[1]
+  Si <- parameters[2]
+  C <- parameters[3]
+  p <- parameters[4]
+  gamma <- parameters[5]
+  mu_production <- parameters[6]
+  mu_removal <- parameters[7]
+  alfa <- parameters[8]
+  
+  G <- y[1]
+  I <- y[2]
+  B <- y[3]
+  
+  
+  dG <- u0 + u(t) - (C + Si*I)*G
+  dI <- G^2/(alfa + G^2) * B * p - gamma * I
+  dB <- B * (mu_production * 1/(1 + (8.4/G)^1.7) - mu_removal * 1/(1 + (G/4.8)^8.5))
+  
+  list(c(dG, dI, dB))
+}
