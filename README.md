@@ -5,7 +5,7 @@ This semester, in our Systems Biology class, we have learned about using differe
 
 ## Project Guide:
 The project consists of three folders:
-- The Models folder contains .r and .qmd code files with the insulin/glucose models we created.
+- The Models folder contains .r and .qmd code files with the insulin/glucose models we created while experimenting.
 - The Images folder mainly contains plots used in our application.
 - The Final Project folder includes the Shiny application and the report in PDF format, created using LaTeX.
 
