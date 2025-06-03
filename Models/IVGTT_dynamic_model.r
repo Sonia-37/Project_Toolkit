@@ -69,11 +69,10 @@ out <- dede(
 colnames(out) <- c("time", "G", "I")
 
 
-# Plot
+
 matplot(out[, "time"], out[, c("G", "I")], type = "l", lty = 1, col = c("blue", "red"), 
         ylim=c(0, 400),
         xlab = "time (min)", ylab = "Concentration", main = "IVGTT glucose–insulin interaction dynamic model")
 legend("topright", legend = c("Glucose", "Insulin"), col = c("blue", "red"), lty = 1)
-
 
 
